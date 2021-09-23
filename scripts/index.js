@@ -1,7 +1,7 @@
 function getProducts() {
     fetch("http://localhost:3000/api/teddies")
         .catch(function(error) {                //En cas d'erreur
-            generateErrorMessage()              //Appeler la fonction qui vas générer un message
+            generateErrorMessage()              //Appeler la fonction qui vas générer un message d'erreur
         })
         .then(function(res) {
             if (res.ok) {                       //Si il n'y a pas d'erreur
@@ -14,7 +14,7 @@ function getProducts() {
 }getProducts();
 
 
-//fonction qui crée le message d'erreur
+//fonction qui crée une div contenant le message d'erreur
 function generateErrorMessage() {
     const messageError = document.createElement('div');
     messageError.innerHTML = "<p>Une erreur est survenue, nous ne pouvons pas afficher nos produits. Assurez-vous que le serveur est bien lancé sur le port 3000.</p>";
@@ -28,7 +28,7 @@ function generateErrorMessage() {
 function attributeProductInfo(produits) {
     for (let i in produits) {       //Pour chaque produits
         //Création du liens vers la page de produit
-        let container = document.getElementById('product_container');
+        const container = document.getElementById('product_container');
         const productLink = document.createElement('a');
         container.appendChild(productLink);
         productLink.href = `product.html?id=${produits[i]._id}`;

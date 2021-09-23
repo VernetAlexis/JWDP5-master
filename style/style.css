@@ -142,3 +142,74 @@ article img {
     background-color: rgb(150, 255, 150);
     opacity: 1;
 }
+
+/*Style de la page du panier*/
+#cart_main {
+    display: flex;
+    margin: auto;
+    margin-top: 50px;
+}
+
+#order_resume {
+    width: 80%;
+}
+
+.order_product {
+    display: flex;
+    width: 90%;
+    margin: auto;
+    box-shadow: 3px 3px 10px #ada3ab;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.order_product p {
+    font-size: 1.2em;
+}
+
+.order_product__photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+}
+
+.order_product__name {
+    display: inline-block;
+    width: 85%;
+    margin-left: 20px;
+}
+
+.order_product__quantity, .order_product__unitprice, .order_product__totalprice {
+    width: 6%;
+}
+
+#order_form {
+    width: 15%;
+    height: 280px;
+    border-radius: 30px;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: -3px 3px 10px #ada3ab;
+    min-width: 200px;
+}
+
+#order_form #order_button{
+    margin-top: 20px;
+}
+
+#order_total {
+    text-align: center;
+}
+
+/*Style de la page de confirmation*/
+#confirmation {
+    margin: auto;
+    background-color: white;
+    width: 30%;
+    text-align: center;
+    border: 3px solid #ada3ab;
+    box-shadow: 3px 3px 10px #ada3ab;
+    margin-top: 50px;
+    border-radius: 20px
+}

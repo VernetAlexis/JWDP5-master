@@ -11,12 +11,35 @@
             <a href="./index.html"><img src="./style/images/logo.jpg" alt="logo du site" class="logo"></a>
             <a href="./panier.html"><img src="./style/images/panier.jpg" alt="logo représentant un caddie" class="logo_panier"></a>
         </header>
-        <h1>Panier</h1>
+        <main>
+            <div id="cart_main">
+                <section id="order_resume">
+                    <article class="order_product">
+                        <h2 class="order_product__name">Nom du produit</h2>
+                        <p class="order_product__quantity">Qty</p>
+                        <p class="order_product__unitprice">Prix unit.</p>
+                        <p class="order_product__totalprice">Prix total</p>
+                    </article>
+                </section>
+                <form id="order_form">
+                    <label for="first_name">Prénom :</label><br><input type="text" id="first_name" required><br>
+                    <label for="last_name">Nom :</label><br><input type="text" id="last_name" required><br>
+                    <label for="adress">Adresse :</label><br><input type="text" id="adress" required><br>
+                    <label for="city">Ville :</label><br><input type="text" id="city" required><br>
+                    <label for="email">Adresse e-mail :</label><br><input type="email" id="email" required><br>
+                    <div id="button">
+                    <input type="submit" value="Passer la commande" id="order_button">
+                    </div>
+                </form>
+            </div>
+            <h2 id="order_total">Prix total de la commande : <strong id="total_order_price"></strong> €</h2>
+        </main>
         <footer>
             <ul>
                 <a href="#"><li>Mentions légales</li></a>
                 <a href="#"><li>Contact</li></a>
             </ul>
         </footer>
+        <script src="./scripts/panier.js"></script>
     </body>
 </html>
