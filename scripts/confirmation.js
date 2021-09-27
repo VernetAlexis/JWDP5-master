@@ -1,7 +1,9 @@
-let price = document.getElementById('price');
-let id = document.getElementById('id');
+function confirmation() {
+    let price = document.getElementById('price');
+    let id = document.getElementById('id');
 
-price.innerText = localStorage.getItem('totalPrice')    //On récupère le prix total dans le localstorage et on l'intègre à la page
-id.innerText = localStorage.getItem('orderId')      //On récupère l'id de commande dans le localstorage et on l'intègre à la page
+    price.innerText = localStorage.getItem('totalPrice')    //On récupère le prix total dans le localstorage et on l'intègre à la page
+    id.innerText = localStorage.getItem('orderId')      //On récupère l'id de commande dans le localstorage et on l'intègre à la page
 
-localStorage.clear()        //On vide le localstorage
+    localStorage.clear()        //On vide le localstorage
+}confirmation()

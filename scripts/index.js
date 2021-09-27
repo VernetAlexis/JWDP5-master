@@ -13,7 +13,6 @@ function getProducts() {
         })
 }getProducts();
 
-
 //fonction qui crée une div contenant le message d'erreur
 function generateErrorMessage() {
     const messageError = document.createElement('div');
@@ -22,7 +21,6 @@ function generateErrorMessage() {
     elt.replaceChild(messageError, document.getElementById('product_container'));
     messageError.classList.add("error_message");
 }
-
 
 //fonction qui crée une carte pour chaque produits
 function attributeProductInfo(produits) {

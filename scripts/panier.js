@@ -1,21 +1,27 @@
 let stockage = localStorage;
 let totalOrderPrice = 0;
 
-if (stockage.length == 0) {     //Si le localstorage est vide
-    generateErrorMessage();     //On affiche un message d'erreur
-} else {        //Sinon
-    for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément du localstorage
-        let key = stockage.key(i);                  //On récupère la key qui correspond à l'id du produit
-        let value = stockage.getItem(key);          //On récupère la valeur lié à la key, c'est à dire la quantité
-        fetch(`http://localhost:3000/api/teddies/${key}`)   //On fait une requête au serveur avec la key récupéré
-        .then(function(res) {
-            return res.json();
-        })
-        .then(function(result) {
-            createOrderResume (result, value);  //On appelle la fonction qui vas créer le resumer de la commande
-        })
+function verificationPanier() {
+    if (stockage.length == 0) {     //Si le localstorage est vide
+        generateErrorMessage();     //On affiche un message d'erreur
+    } else {        //Sinon
+        for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément du localstorage
+            let key = stockage.key(i);                  //On récupère la key qui correspond à l'id du produit
+            let value = stockage.getItem(key);          //On récupère la valeur lié à la key, c'est à dire la quantité
+            fetch(`http://localhost:3000/api/teddies/${key}`)   //On fait une requête au serveur avec la key récupéré
+            .then(function(res) {
+                if(res.ok) {
+                    return res.json();
+                } else {
+                    stockage.removeItem(key)
+                }
+            })
+            .then(function(result) {
+                createOrderResume (result, value);  //On appelle la fonction qui vas créer le resumer de la commande
+            })
+        }
     }
-}
+}verificationPanier()
 
 //Fonction qui crée le resumer de la commande grâce aux informations recupérées par la requête fetch et à la quantité recupéré dans le localstorage
 function createOrderResume(result, value) {
@@ -64,7 +70,7 @@ function generateErrorMessage() {
 }
 
 const button = document.getElementById('order_button');
-button.addEventListener('click', function() {      //Lorsque l'utilisateur clique sur le bouton pour passer commande
+button.addEventListener('click', function(e) {      //Lorsque l'utilisateur clique sur le bouton pour passer commande
     if (!document.getElementById('order_form').checkValidity()) {   //On vérifie la validité du formulaire de commande, Si il n'est pas valide
         const formError = document.createElement('div');            //On affiche un message d'erreur
         formError.innerHTML = "<p>Merci de compléter toutes les informations demandées.</p>";
@@ -86,8 +92,6 @@ button.addEventListener('click', function() {      //Lorsque l'utilisateur cliqu
         for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément dans le localstorage
             order.products.push(stockage.key(i))        //On ajoute la key, c'est à dire l'id de produit dans l'array
         }
-        const totalPrice = document.getElementById('total_order_price').innerText;  //On recupère le prix total de la commande
-        stockage.setItem('totalPrice', totalPrice);     //On envoie le prix total dans le localstorage
         fetch("http://localhost:3000/api/teddies/order", {      //On envoie une requête au serveur
             method: "POST",                                     
             headers: {
@@ -97,13 +101,16 @@ button.addEventListener('click', function() {      //Lorsque l'utilisateur cliqu
             body: JSON.stringify(order)         //On envoie l'objet order sous format json
         })
         .then(function(res) {
-            if(res.ok) {
-                return res.json();      //On recupère la réponse du serveur au format json
-            }
+            return res.json();      //On recupère la réponse du serveur au format json
         })
         .then(function(data) {
             stockage.setItem('orderId', data.orderId)       //On stock dans le localstorage l'id de commande que la serveur nous à retourner
+            const totalPrice = document.getElementById('total_order_price').innerText;  //On recupère le prix total de la commande
+            stockage.setItem('totalPrice', totalPrice);     //On envoie le prix total dans le localstorage
             document.location.href = "confirmation.html"    //On redirige l'utilisateur sur la page de confirmation
+        })
+        .catch(function(error) {
+            console.log(error)     //En cas d'erreur, on génère un message d'erreur
         })
     }
 })

@@ -13,7 +13,6 @@ function createProductPage() {
         }
     })
     .then(function(result) {
-        console.log(result);
         associationInfoProduit(result);     //On utilise les informations qu'on viens de récupérer pour créer le contenu de la page
     })
 }createProductPage();

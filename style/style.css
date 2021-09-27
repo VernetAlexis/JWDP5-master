@@ -32,11 +32,13 @@ footer a {
     list-style: none;
 }
 
-/*Style de la page Index*/
 .logo_panier {
     float: right;
     margin-right: 20px;
 }
+
+
+/*Style de la page Index*/
 
 .error_message {
     background-color: rgb(255, 150, 150);
@@ -55,12 +57,12 @@ footer a {
 }
 
 #product_container a {
-    margin: 50px 50px 0 50px;
+    margin: 50px 0 0 50px;
 }
 
 .product {
-    width: 500px;
-    height: 500px;
+    width: 300px;
+    height: 300px;
     background-color: white;
     box-shadow: 3px 3px 10px #ada3ab;
     border-radius: 20px;
@@ -69,7 +71,7 @@ footer a {
 article img {
     object-fit: cover;
     width: 100%;
-    height: 85%;
+    height: 80%;
     border-radius: 20px 20px 0 0;
 }
 
@@ -143,6 +145,41 @@ article img {
     opacity: 1;
 }
 
+@media screen and (max-width: 1200px) {
+    #content img {
+        width: 30%;
+        height: 300px;
+    }
+
+    #info_produit {
+        width: 40%;
+    }
+
+    #option {
+        width: 30%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #content {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #content img {
+        width: 50%;
+    }
+
+    #info_produit {
+        width: 100%;
+    }
+
+    #option {
+        width: 50%;
+    }
+}
+
+
 /*Style de la page du panier*/
 #cart_main {
     display: flex;
@@ -186,7 +223,7 @@ article img {
 
 #order_form {
     width: 15%;
-    height: 280px;
+    max-height: 280px;
     border-radius: 30px;
     padding: 20px;
     box-sizing: border-box;
@@ -200,6 +237,31 @@ article img {
 
 #order_total {
     text-align: center;
+}
+
+@media screen and (max-width: 1200px) {
+    #cart_main {
+        flex-direction: column;
+    }
+
+    #order_resume {
+        margin: auto;
+    }
+
+    .order_product {
+        width: 100%;
+    }
+
+    #order_form {
+        display: flex;
+        width: 80%;
+        margin: auto;
+        flex-wrap: wrap;
+    }
+
+    #order_form label {
+        margin-right: 20px;
+    }
 }
 
 /*Style de la page de confirmation*/
