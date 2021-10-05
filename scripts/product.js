@@ -59,55 +59,44 @@ button.addEventListener('click', function() {                   //Evenement qui 
         document.getElementById('option').appendChild(error);
         removeMessage(error);       //On appelle une fonction qui supprime le message d'erreur
     } else {         //Lorsque la quantité saisie est valide           
-        // let localQuantity = localStorage.getItem(id);   //On recupère la quantité du produit enregistrer dans le local storage
-        // if (localQuantity === null) {       //Si cette quantité est null
-        //     localStorage.setItem(id, quantity);     //Alors on ajoute l'identifiant du produit et la quantité saisie par l'utilisateur dans le local storage
-        // } else {            //Sinon au moins un exemplaire du produit est déja présent dans le local storage
-        //     quantity = parseInt(quantity, 10) + parseInt(localQuantity, 10);    //On additionne la quantité saisie par l'utilisateur et celle déjà présente dans le local storage
-        //     localStorage.setItem(id, quantity);     //On met à jour le local storage avec cette nouvelle quantité
-        // }
-        // const validation = document.createElement('p');             //On affiche un message indiquant que le panier à bien été mis à jour
-        // validation.classList.add("validation");
-        // validation.innerText = "Votre panier à été mis à jour.";
-        // document.getElementById('option').appendChild(validation);
-        // removeMessage(validation);      //On appelle la fonction qui vas supprimer le message de validation
         let cart = [];
-        if (localStorage.getItem('cart') === null) {
-            let productAdded = {
+        if (localStorage.getItem('cart') === null) {        //On vérifie si le localstorage est vide
+            let productAdded = {                //On crée l'objet qui vas contenir toutes les informations du produit
                 name : document.getElementById('name').innerHTML,
                 price : document.getElementById('price').innerHTML,
                 quantity : quantity,
                 id : id, 
                 photo : document.getElementById('photo_produit').getAttribute('src')
             }
-            cart.push(productAdded)
-            localStorage.setItem('cart', JSON.stringify(cart))
-        } else {
-            cart = JSON.parse(localStorage.getItem('cart'))
-            let panierAJour = false;
-            for (let i in cart) {
-                if (cart[i].id === id) {
-                    cart[i].quantity = parseInt(cart[i].quantity, 10) + parseInt(quantity, 10)
-                    localStorage.setItem('cart', JSON.stringify(cart))
-                    panierAJour = true;
+            cart.push(productAdded)     //On l'ajoute dans le tableau cart
+            localStorage.setItem('cart', JSON.stringify(cart))      //On envoie le tableau dans le localstorage au format JSON
+        } else {        //Sinon, lorsque le locastorage contient au moins un article
+            cart = JSON.parse(localStorage.getItem('cart'))     //On récupère le contenu du localstorage
+            let panierAJour = false;        //On défini une variable qui vas indiquer si le panier est à jour
+            for (let i in cart) {       //pour chaque élément du tableau cart
+                if (cart[i].id === id) {        //On vérifie si le produits qu'on souhaite ajouter est déjà présent dans le panier
+                    cart[i].quantity = parseInt(cart[i].quantity, 10) + parseInt(quantity, 10)      //Si c'est le cas on additionne la quantité déjà présente avec la nouvelle quantité
+                    localStorage.setItem('cart', JSON.stringify(cart))      //On met à jour le localstorage
+                    panierAJour = true;     //Le panier est à jour, on défini la variable sur true
                 }
             }
-            console.log(cart)
-            console.log(panierAJour)
-            if (!panierAJour) {
-                let productAdded = {
+            if (!panierAJour) {     //Si la variable est fausse
+                let productAdded = {            //On crée l'objet qui vas contenir toutes les informations du produit
                     name : document.getElementById('name').innerHTML,
                     price : document.getElementById('price').innerHTML,
                     quantity : quantity,
                     id : id, 
                     photo : document.getElementById('photo_produit').getAttribute('src')
                 }
-                cart.push(productAdded)
-                localStorage.setItem('cart', JSON.stringify(cart))
+                cart.push(productAdded)     //On l'ajoute dans le tableau cart
+                localStorage.setItem('cart', JSON.stringify(cart))  //On envoie le tableau dans le localstorage au format JSON
             }
-            // cart.push(productAdded)
-            // localStorage.setItem('cart', JSON.stringify(cart))
         }
+        const validation = document.createElement('p');             //On affiche un message indiquant que le panier à bien été mis à jour
+        validation.classList.add("validation");
+        validation.innerText = "Votre panier à été mis à jour.";
+        document.getElementById('option').appendChild(validation);
+        removeMessage(validation);      //On appelle la fonction qui vas supprimer le message de validation
     }
 })
 

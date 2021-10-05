@@ -5,22 +5,7 @@ function verificationPanier() {
     if (cart.length == 0) {     //Si le localstorage est vide
         generateErrorMessage();     //On affiche un message d'erreur
     } else {        //Sinon
-        // for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément du localstorage
-        //     let key = stockage.key(i);                  //On récupère la key qui correspond à l'id du produit
-        //     let value = stockage.getItem(key);          //On récupère la valeur lié à la key, c'est à dire la quantité
-        //     fetch(`http://localhost:3000/api/teddies/${key}`)   //On fait une requête au serveur avec la key récupéré
-        //     .then(function(res) {
-        //         if(res.ok) {
-        //             return res.json();
-        //         } else {
-        //             stockage.removeItem(key)
-        //         }
-        //     })
-        //     .then(function(result) {
-        //         createOrderResume (result, value);  //On appelle la fonction qui vas créer le resumer de la commande
-        //     })
-        // }
-        createOrderResume()
+        createOrderResume()     //On appelle la fonction qui crée le resumer de la commande
     }
 }verificationPanier()
 
