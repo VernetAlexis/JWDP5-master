@@ -1,64 +1,28 @@
-let stockage = localStorage;
+let cart = JSON.parse(localStorage.getItem('cart'));
 let totalOrderPrice = 0;
 
 function verificationPanier() {
-    if (stockage.length == 0) {     //Si le localstorage est vide
+    if (cart.length == 0) {     //Si le localstorage est vide
         generateErrorMessage();     //On affiche un message d'erreur
     } else {        //Sinon
-        for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément du localstorage
-            let key = stockage.key(i);                  //On récupère la key qui correspond à l'id du produit
-            let value = stockage.getItem(key);          //On récupère la valeur lié à la key, c'est à dire la quantité
-            fetch(`http://localhost:3000/api/teddies/${key}`)   //On fait une requête au serveur avec la key récupéré
-            .then(function(res) {
-                if(res.ok) {
-                    return res.json();
-                } else {
-                    stockage.removeItem(key)
-                }
-            })
-            .then(function(result) {
-                createOrderResume (result, value);  //On appelle la fonction qui vas créer le resumer de la commande
-            })
-        }
+        // for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément du localstorage
+        //     let key = stockage.key(i);                  //On récupère la key qui correspond à l'id du produit
+        //     let value = stockage.getItem(key);          //On récupère la valeur lié à la key, c'est à dire la quantité
+        //     fetch(`http://localhost:3000/api/teddies/${key}`)   //On fait une requête au serveur avec la key récupéré
+        //     .then(function(res) {
+        //         if(res.ok) {
+        //             return res.json();
+        //         } else {
+        //             stockage.removeItem(key)
+        //         }
+        //     })
+        //     .then(function(result) {
+        //         createOrderResume (result, value);  //On appelle la fonction qui vas créer le resumer de la commande
+        //     })
+        // }
+        createOrderResume()
     }
 }verificationPanier()
-
-//Fonction qui crée le resumer de la commande grâce aux informations recupérées par la requête fetch et à la quantité recupéré dans le localstorage
-function createOrderResume(result, value) {
-    const orderResume = document.getElementById('order_resume');
-    const orderProduct = document.createElement('article')
-    orderProduct.classList.add("order_product");
-    orderResume.appendChild(orderProduct);
-
-    const photo = document.createElement('img');
-    photo.classList.add("order_product__photo");
-    photo.setAttribute("src", result.imageUrl);
-    orderProduct.appendChild(photo);
-
-    const name = document.createElement('h2');
-    name.classList.add("order_product__name");
-    name.innerText = result.name;
-    orderProduct.appendChild(name);
-
-    const quantity = document.createElement('p');
-    quantity.classList.add("order_product__quantity");
-    quantity.innerText = value;
-    orderProduct.appendChild(quantity);
-
-    const unitPrice = document.createElement('p');
-    unitPrice.classList.add("order_product__unitprice");
-    unitPrice.innerText = (result.price / 100) + " €";
-    orderProduct.appendChild(unitPrice);
-
-    const totalPrice = document.createElement('p');
-    totalPrice.classList.add("order_product__totalprice");
-    totalPrice.innerText = value * (result.price / 100) + " €";     //Calcul du prix de chaque produit en foction de la quantité dans le panier
-    orderProduct.appendChild(totalPrice);
-
-    totalOrderPrice = totalOrderPrice + (value * (result.price / 100));     //Calcul du prix total de la commande
-    let total = document.getElementById('total_order_price');
-    total.innerText = totalOrderPrice;
-}
 
 //Fonction qui génère le message d'erreur
 function generateErrorMessage() {
@@ -68,6 +32,46 @@ function generateErrorMessage() {
     elt.parentNode.replaceChild(messageError, elt);
     messageError.classList.add("error_message");
 }
+
+//Fonction qui crée le resumer de la commande grâce aux informations recupérées par la requête fetch et à la quantité recupéré dans le localstorage
+function createOrderResume() {
+    for (let i in cart) {
+        const orderResume = document.getElementById('order_resume');
+        const orderProduct = document.createElement('article')
+        orderProduct.classList.add("order_product");
+        orderResume.appendChild(orderProduct);
+    
+        const photo = document.createElement('img');
+        photo.classList.add("order_product__photo");
+        photo.setAttribute("src", cart[i].photo);
+        orderProduct.appendChild(photo);
+    
+        const name = document.createElement('h2');
+        name.classList.add("order_product__name");
+        name.innerText = cart[i].name;
+        orderProduct.appendChild(name);
+    
+        const quantity = document.createElement('p');
+        quantity.classList.add("order_product__quantity");
+        quantity.innerText = cart[i].quantity;
+        orderProduct.appendChild(quantity);
+    
+        const unitPrice = document.createElement('p');
+        unitPrice.classList.add("order_product__unitprice");
+        unitPrice.innerText = cart[i].price + " €";
+        orderProduct.appendChild(unitPrice);
+    
+        const totalPrice = document.createElement('p');
+        totalPrice.classList.add("order_product__totalprice");
+        totalPrice.innerText = cart[i].quantity * cart[i].price + " €";     //Calcul du prix de chaque produit en foction de la quantité dans le panier
+        orderProduct.appendChild(totalPrice);
+    
+        totalOrderPrice = totalOrderPrice + (cart[i].quantity * cart[i].price);     //Calcul du prix total de la commande
+        let total = document.getElementById('total_order_price');
+        total.innerText = totalOrderPrice;
+    }
+}
+
 
 const button = document.getElementById('order_button');
 button.addEventListener('click', function(e) {      //Lorsque l'utilisateur clique sur le bouton pour passer commande
@@ -89,8 +93,8 @@ button.addEventListener('click', function(e) {      //Lorsque l'utilisateur cliq
             },
             products: []        //Ainsi qu'un array
         }
-        for (let i = 0; i < stockage.length; i++) {     //Pour chaque élément dans le localstorage
-            order.products.push(stockage.key(i))        //On ajoute la key, c'est à dire l'id de produit dans l'array
+        for (let i in cart) {     //Pour chaque élément dans le localstorage
+            order.products.push(cart[i].id)        //On ajoute la key, c'est à dire l'id de produit dans l'array
         }
         fetch("http://localhost:3000/api/teddies/order", {      //On envoie une requête au serveur
             method: "POST",                                     
@@ -104,9 +108,9 @@ button.addEventListener('click', function(e) {      //Lorsque l'utilisateur cliq
             return res.json();      //On recupère la réponse du serveur au format json
         })
         .then(function(data) {
-            stockage.setItem('orderId', data.orderId)       //On stock dans le localstorage l'id de commande que la serveur nous à retourner
+            localStorage.setItem('orderId', data.orderId)       //On stock dans le localstorage l'id de commande que la serveur nous à retourner
             const totalPrice = document.getElementById('total_order_price').innerText;  //On recupère le prix total de la commande
-            stockage.setItem('totalPrice', totalPrice);     //On envoie le prix total dans le localstorage
+            localStorage.setItem('totalPrice', totalPrice);     //On envoie le prix total dans le localstorage
             document.location.href = "confirmation.html"    //On redirige l'utilisateur sur la page de confirmation
         })
         .catch(function(error) {

@@ -3,7 +3,7 @@ const id = new URL(document.location).searchParams.get("id");
 
 //Fonction principal qui va appeler les autres fonction qui permettent de créer le contenu de la page
 function createProductPage() {
-    fetch(`http://localhost:3000/api/teddies/${id}`)  //On fait un requete au serveur en utilisant l'id recupérer
+    fetch(`http://localhost:3000/api/teddies/${id}`)  //On fait une requête au serveur en utilisant l'id recupérer
     .catch(function(error) {
         generateErrorMessage();     //En cas d'erreur, on génère un message d'erreur
     })
@@ -38,7 +38,7 @@ function associationInfoProduit(result) {
     description.innerText = result.description;
 
     const price = document.getElementById('price');             //Associe le prix du produit
-    price.innerText = "Prix : " + (result.price / 100) + " €";  //On divise le prix récupéré pour l'avoir sous le bon format
+    price.innerText = (result.price / 100);  //On divise le prix récupéré pour l'avoir sous le bon format
 
     for(let i in result.colors) {                           //Utilisation d'une boucle pour creer les différentes options de couleurs
         const color = document.getElementById('color');
@@ -59,18 +59,55 @@ button.addEventListener('click', function() {                   //Evenement qui 
         document.getElementById('option').appendChild(error);
         removeMessage(error);       //On appelle une fonction qui supprime le message d'erreur
     } else {         //Lorsque la quantité saisie est valide           
-        let localQuantity = localStorage.getItem(id);   //On recupère la quantité du produit enregistrer dans le local storage
-        if (localQuantity === null) {       //Si cette quantité est null
-            localStorage.setItem(id, quantity);     //Alors on ajoute l'identifiant du produit et la quantité saisie par l'utilisateur dans le local storage
-        } else {            //Sinon au moins un exemplaire du produit est déja présent dans le local storage
-            quantity = parseInt(quantity, 10) + parseInt(localQuantity, 10);    //On additionne la quantité saisie par l'utilisateur et celle déjà présente dans le local storage
-            localStorage.setItem(id, quantity);     //On met à jour le local storage avec cette nouvelle quantité
+        // let localQuantity = localStorage.getItem(id);   //On recupère la quantité du produit enregistrer dans le local storage
+        // if (localQuantity === null) {       //Si cette quantité est null
+        //     localStorage.setItem(id, quantity);     //Alors on ajoute l'identifiant du produit et la quantité saisie par l'utilisateur dans le local storage
+        // } else {            //Sinon au moins un exemplaire du produit est déja présent dans le local storage
+        //     quantity = parseInt(quantity, 10) + parseInt(localQuantity, 10);    //On additionne la quantité saisie par l'utilisateur et celle déjà présente dans le local storage
+        //     localStorage.setItem(id, quantity);     //On met à jour le local storage avec cette nouvelle quantité
+        // }
+        // const validation = document.createElement('p');             //On affiche un message indiquant que le panier à bien été mis à jour
+        // validation.classList.add("validation");
+        // validation.innerText = "Votre panier à été mis à jour.";
+        // document.getElementById('option').appendChild(validation);
+        // removeMessage(validation);      //On appelle la fonction qui vas supprimer le message de validation
+        let cart = [];
+        if (localStorage.getItem('cart') === null) {
+            let productAdded = {
+                name : document.getElementById('name').innerHTML,
+                price : document.getElementById('price').innerHTML,
+                quantity : quantity,
+                id : id, 
+                photo : document.getElementById('photo_produit').getAttribute('src')
+            }
+            cart.push(productAdded)
+            localStorage.setItem('cart', JSON.stringify(cart))
+        } else {
+            cart = JSON.parse(localStorage.getItem('cart'))
+            let panierAJour = false;
+            for (let i in cart) {
+                if (cart[i].id === id) {
+                    cart[i].quantity = parseInt(cart[i].quantity, 10) + parseInt(quantity, 10)
+                    localStorage.setItem('cart', JSON.stringify(cart))
+                    panierAJour = true;
+                }
+            }
+            console.log(cart)
+            console.log(panierAJour)
+            if (!panierAJour) {
+                let productAdded = {
+                    name : document.getElementById('name').innerHTML,
+                    price : document.getElementById('price').innerHTML,
+                    quantity : quantity,
+                    id : id, 
+                    photo : document.getElementById('photo_produit').getAttribute('src')
+                }
+                cart.push(productAdded)
+                localStorage.setItem('cart', JSON.stringify(cart))
+            }
+            // cart.push(productAdded)
+            // localStorage.setItem('cart', JSON.stringify(cart))
         }
-        const validation = document.createElement('p');             //On affiche un message indiquant que le panier à bien été mis à jour
-        validation.classList.add("validation");
-        validation.innerText = "Votre panier à été mis à jour.";
-        document.getElementById('option').appendChild(validation);
-        removeMessage(validation);      //On appelle la fonction qui vas supprimer le message de validation
     }
 })
 

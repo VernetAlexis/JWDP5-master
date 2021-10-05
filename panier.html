@@ -22,10 +22,10 @@
                     </article>
                 </section>
                 <form id="order_form">
-                    <label for="first_name">Prénom :<br><input type="text" id="first_name" required><br></label>
-                    <label for="last_name">Nom :<br><input type="text" id="last_name" required><br></label>
-                    <label for="adress">Adresse :<br><input type="text" id="adress" required><br></label>
-                    <label for="city">Ville :<br><input type="text" id="city" required><br></label>
+                    <label for="first_name">Prénom :<br><input type="text" id="first_name" required pattern="[A-Za-zÀ-ÿ]+(( |-)?[A-Za-zÀ-ÿ]*)*"><br></label>
+                    <label for="last_name">Nom :<br><input type="text" id="last_name" required pattern="[A-Za-zÀ-ÿ]+(( |-)?[A-Za-zÀ-ÿ]*)*"><br></label>
+                    <label for="adress">Adresse :<br><input type="text" id="adress" required pattern="[0-9]+[A-Za-zÀ-ÿÀ-ÿ']*(( |-)?[A-Za-zÀ-ÿ'])+(( |-)?[0-9A-Za-zÀ-ÿ']*)*"><br></label>
+                    <label for="city">Ville :<br><input type="text" id="city" required pattern="[A-Za-zÀ-ÿ']+(( |-)?[A-Za-zÀ-ÿ']+)*"><br></label>
                     <label for="email">Adresse e-mail :<br><input type="email" id="email" required><br></label>
                     <div id="button">
                         <input type="submit" value="Passer la commande" id="order_button">
